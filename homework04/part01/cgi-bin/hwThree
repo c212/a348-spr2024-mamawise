@@ -1,0 +1,34 @@
+#!/usr/bin/python3
+
+from time import gmtime, strftime
+
+import cgitb, cgi
+cgitb.enable()
+
+print "Content-type: text/html\n\n",
+
+form = cgi.FieldStorage()
+
+u = form.getvalue("uku")
+h = form.getvalue("hbr")
+a = form.getvalue("app")
+
+address = form.getvalue("add")
+
+print """
+  Your order contains: <ul>
+    <li> %s ukuleles
+    <li> %s hair brushes
+    <li> %s apples
+  </ul> <p>
+  Your order will be shipped to %s
+""" % ( u, h, a, address)
+
+d = strftime("%a, %d %b %Y %H:%M:%S +0000", gmtime())
+
+line = " %s %s %s %s %s \n" % (u, h, a, address, d)
+
+print "<hr>(%s)<hr>" % line
+
+with open("/u/mamawise/a348-spring-2023-workspace/apache/htdocs/hwThree/orders.txt", "a") as myfile:
+    myfile.write(line)
